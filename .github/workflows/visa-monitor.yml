@@ -5,7 +5,7 @@ on:
   schedule:
     # GitHub Actions scheduled workflows are not reliable at 1-minute cadence.
     # This runs at the smallest practical interval for the free GitHub runner.
-    - cron: "*/5 * * * *"
+    - cron: "2-59/5 * * * *"
 
 jobs:
   monitor:
