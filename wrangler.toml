@@ -1,0 +1,21 @@
+name = "visa-slot-monitor"
+main = "src/worker.js"
+compatibility_date = "2026-06-24"
+
+workers_dev = true
+
+[triggers]
+crons = ["* * * * *"]
+
+[[kv_namespaces]]
+binding = "VISA_MONITOR_STATE"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+
+[vars]
+TARGET_CITIES = "cnGUA"
+TARGET_VISA_TYPES = "F-1"
+DATE_FROM = "2026-07-01"
+DATE_TO = "2026-08-31"
+EMAIL_FROM = ""
+EMAIL_TO = ""
+

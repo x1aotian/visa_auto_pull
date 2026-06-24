@@ -1,0 +1,42 @@
+name: Visa Slot Monitor
+
+on:
+  workflow_dispatch:
+  schedule:
+    # GitHub Actions scheduled workflows are not reliable at 1-minute cadence.
+    # This runs at the smallest practical interval for the free GitHub runner.
+    - cron: "*/5 * * * *"
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Restore alert state
+        uses: actions/cache@v4
+        with:
+          path: .cache
+          key: visa-state-${{ github.run_id }}
+          restore-keys: |
+            visa-state-
+
+      - name: Check slots
+        env:
+          TARGET_CITIES: ${{ secrets.TARGET_CITIES }}
+          TARGET_VISA_TYPES: ${{ secrets.TARGET_VISA_TYPES }}
+          DATE_FROM: ${{ secrets.DATE_FROM }}
+          DATE_TO: ${{ secrets.DATE_TO }}
+          GMAIL_USERNAME: ${{ secrets.GMAIL_USERNAME }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
+          STATE_FILE: .cache/seen.json
+        run: python -m visa_monitor.monitor

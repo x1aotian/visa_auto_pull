@@ -1,0 +1,8 @@
+.cache/
+__pycache__/
+*.pyc
+qmq.bundle.js
+node_modules/
+.wrangler/
+.env
+.env.*
